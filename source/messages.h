@@ -131,6 +131,7 @@ public:
     float           _swell;
     float           _tfreq;
     float           _tmodd;
+    float           _fmodd;
 };
 
 

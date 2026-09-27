@@ -37,6 +37,7 @@ public:
     void set_swell (float stat) { _swel = 0.2 + 0.8 * stat * stat; }
     void set_tfreq (float freq) { _w = 6.283184f * PERIOD * freq / _fsam; }
     void set_tmodd (float modd) { _m = modd; }
+    void set_fmodd (float fmodd) { _f = fmodd; }
     void set_div_mask (int bits);
     void clr_div_mask (int bits);
     void set_rank_mask (int ind, int bits);
@@ -62,6 +63,7 @@ private:
     float      _c;
     float      _s;
     float      _m;
+    float      _f;
     float      _buff [NCHANN * PERIOD];
 };
 

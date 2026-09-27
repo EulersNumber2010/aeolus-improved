@@ -55,7 +55,7 @@ class Divis
 public:
 
     enum { HAS_SWELL = 1, HAS_TREM = 2 };
-    enum { SWELL, TFREQ, TMODD, NPARAM };
+    enum { SWELL, TFREQ, TMODD, FMOD, NPARAM };
 
     Divis (void);
 

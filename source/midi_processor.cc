@@ -145,6 +145,7 @@ void MidiProcessor::process_controller_event(
     case MIDICTL_SWELL:
     case MIDICTL_TFREQ:
     case MIDICTL_TMODD:
+    case MIDICTL_FMOD:
         // Division performance controls - division channels only
         if (f & 2)
         {

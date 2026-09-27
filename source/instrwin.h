@@ -32,7 +32,7 @@ class Divis
 {
 public:
 
-    X_hslider  *_slid [3];
+    X_hslider  *_slid [4];
 };
 
 

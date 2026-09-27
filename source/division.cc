@@ -34,7 +34,8 @@ Division::Division (Asection *asect, float fsam) :
     _w (0.0f),
     _c (1.0f),
     _s (0.0f),
-    _m (0.0f)
+    _m (0.0f),
+    _f (0.0f)
 {
     for (int i = 0; i < NRANKS; i++) _ranks [i] = 0;
 }
@@ -69,6 +70,28 @@ void Division::process (void)
             _s = 0;
         }
         g *= 1.0f + _m * _s;
+        if (_f > 0.0f)
+        {
+            float fm = _f * _s;
+            for (i = 0; i < _nrank; i++)
+            {
+                if (_ranks [i]) _ranks [i]->set_detune (fm * 2.0f);
+            }
+        }
+        else
+        {
+            for (i = 0; i < _nrank; i++)
+            {
+                if (_ranks [i]) _ranks [i]->set_detune (0.0f);
+            }
+        }
+    }
+    else
+    {
+        for (i = 0; i < _nrank; i++)
+        {
+            if (_ranks [i]) _ranks [i]->set_detune (0.0f);
+        }
     }
 
     t = 1.05f * _gain;

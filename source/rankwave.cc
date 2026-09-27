@@ -83,6 +83,7 @@ void Pipewave::play (void)
         i = _i_r - 1;
         dg = g / PERIOD;
         if (i) dg *= _m_r ;
+        float det = _detune * _k_s;
 
         if (r < _p1)
         {
@@ -95,7 +96,7 @@ void Pipewave::play (void)
         else
         {
             y = _y_r;
-            dy = _d_r;
+            dy = _d_r + det;
             while (k--)
             {
                 y += dy;
@@ -111,7 +112,7 @@ void Pipewave::play (void)
                 }
                 *q++ += g * (r [0] + y * (r [1] - r [0]));
                 g -= dg;
-                r += _k_s;
+                r += _k_s + (int)lrintf (det);
                 if (r >= _p2) r -= _l1;
             }
             _y_r = y;
@@ -140,7 +141,7 @@ void Pipewave::play (void)
         {
             y = _y_p;
             _z_p += _d_w * (_d_a * (_rgen.urandf () - 0.5f) - _z_p);
-            dy = _z_p * _k_s;
+            dy = _z_p * (_k_s + _detune * _k_s);
             while (k--)
             {
                 y += dy;
@@ -155,7 +156,7 @@ void Pipewave::play (void)
                     p -= 1;
                 }
                 *q++ += p [0] + y * (p [1] - p [0]);
-                p += _k_s;
+                p += _k_s + (int)lrintf (_detune * _k_s);
                 if (p >= _p2) p -= _l1;
             }
             _y_p = y;
@@ -404,6 +405,13 @@ void Rankwave::gen_waves (Addsynth *D, float fsamp, float fbase, float *scale)
     _modif = true;
 }
 
+
+void Rankwave::set_detune (float detune)
+{
+    Pipewave *P;
+
+    for (P = _pipes; P < _pipes + (_n1 - _n0 + 1); P++) P->_detune = detune;
+}
 
 void Rankwave::set_param (float *out, int del, int pan)
 {

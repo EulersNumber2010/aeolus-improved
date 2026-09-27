@@ -79,6 +79,11 @@ enum // GLOBAL LIMITS
 #define TMODD_MAX 0.6f
 #define TMODD_DEF 0.3f
 
+#define MIDICTL_FMOD 14
+#define FMOD_MIN 0.0f
+#define FMOD_MAX 1.0f
+#define FMOD_DEF 0.0f
+
 #define MIDICTL_BANK   32
 #define MIDICTL_HOLD   64
 #define MIDICTL_IFELM  98

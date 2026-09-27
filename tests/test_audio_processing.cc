@@ -112,6 +112,11 @@ protected:
     std::unique_ptr<ProcessingTrackingMock> mock;
 };
 
+TEST_F(AudioProcessingTest, TremulantHasFMParameter) {
+    EXPECT_EQ(Divis::NPARAM, 4);
+    EXPECT_EQ(Divis::FMOD, 3);
+}
+
 TEST_F(AudioProcessingTest, AudioPipelineExecution) {
     // Set expectations for a typical audio processing cycle
     EXPECT_CALL(*mock, mock_proc_note_queue(&mock->note_queue));

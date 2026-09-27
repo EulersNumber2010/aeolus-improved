@@ -43,6 +43,9 @@ Divis::Divis (void) :
     _param [TMODD]._val = TMODD_DEF;
     _param [TMODD]._min = TMODD_MIN;
     _param [TMODD]._max = TMODD_MAX;
+    _param [FMOD]._val = FMOD_DEF;
+    _param [FMOD]._min = FMOD_MIN;
+    _param [FMOD]._max = FMOD_MAX;
 }
 
 
@@ -410,6 +413,11 @@ void Model::proc_qmidi (void)
                 set_dipar (SRC_MIDI_PAR, d, 2, TMODD_MIN + v * (TMODD_MAX - TMODD_MIN) / 127.0f);
                 break;
 
+            case MIDICTL_FMOD:
+                // Tremulant FM strength
+                set_dipar (SRC_MIDI_PAR, d, 3, FMOD_MIN + v * (FMOD_MAX - FMOD_MIN) / 127.0f);
+                break;
+
             case MIDICTL_BANK:
                 // Preset bank.
                  if (v < NBANK) _bank = v;
@@ -457,6 +465,7 @@ void Model::init_audio (void)
         M->_swell = D->_param [Divis::SWELL]._val;
         M->_tfreq = D->_param [Divis::TFREQ]._val;
         M->_tmodd = D->_param [Divis::TMODD]._val;
+        M->_fmodd = D->_param [Divis::FMOD]._val;
         send_event (TO_AUDIO, M);
     }
 }
@@ -527,7 +536,7 @@ void Model::init_iface (void)
     }
     for (i = 0; i < _ndivis; i++)
     {
-        for (j = 0; j < 3; j++)
+        for (j = 0; j < Divis::NPARAM; j++)
         {
             send_event (TO_IFACE, new M_ifc_dipar (0, i, j, _divis [i]._param [j]._val));
         }
@@ -993,13 +1002,22 @@ int Model::read_instr (void)
         {
             if (D)
             {
-                if (sscanf (q, "%f%f%n", &(D->_param [Divis::TFREQ]._val),
-                            &(D->_param [Divis::TMODD]._val), &n) != 2) stat = ARGS;
-                else
+                float fmodd = 0.0f;
+                int nvals = sscanf (q, "%f%f%f%n", &(D->_param [Divis::TFREQ]._val),
+                                   &(D->_param [Divis::TMODD]._val), &fmodd, &n);
+                if (nvals == 2)
                 {
+                    D->_param [Divis::FMOD]._val = 0.0f;
                     q += n;
                     D->_flags |= Divis::HAS_TREM;
                 }
+                else if (nvals == 3)
+                {
+                    D->_param [Divis::FMOD]._val = fmodd;
+                    q += n;
+                    D->_flags |= Divis::HAS_TREM;
+                }
+                else stat = ARGS;
             }
             else if (G)
             {
@@ -1196,8 +1214,8 @@ int Model::write_instr (void)
             fprintf (F, "/rank         %c %3d  %s\n", A->_pan, A->_del, A->_filename);
         }
         if (D->_flags & Divis::HAS_SWELL) fprintf (F, "/swell\n");
-        if (D->_flags & Divis::HAS_TREM) fprintf (F, "/tremul       %3.1f  %3.1f\n",
-                                                  D->_param [Divis::TFREQ]._val, D->_param [Divis::TMODD]._val);
+        if (D->_flags & Divis::HAS_TREM) fprintf (F, "/tremul       %3.1f  %3.1f  %3.1f\n",
+                                                  D->_param [Divis::TFREQ]._val, D->_param [Divis::TMODD]._val, D->_param [Divis::FMOD]._val);
         fprintf (F, "/divis/end\n\n");
     }
 

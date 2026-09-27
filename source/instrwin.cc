@@ -157,10 +157,12 @@ void Instrwin::setup (M_ifc_init *M)
         {
             (D->_slid [1]  = new X_hslider (this, this, &sli1, &sca_Tfr, x1,       y, 20, k + 1))->x_map ();
             (D->_slid [2]  = new X_hslider (this, this, &sli1, &sca_Tmd, x1 + 160, y, 20, k + 2))->x_map ();
+            (D->_slid [3]  = new X_hslider (this, this, &sli1, &sca_Tmd, x1 + 320, y, 20, k + 3))->x_map ();
             (new X_hscale (this, &sca_Tfr, x1,       y + 20, 10))->x_map ();
             (new X_hscale (this, &sca_Tmd, x1 + 160, y + 20, 10))->x_map ();
+            (new X_hscale (this, &sca_Tmd, x1 + 320, y + 20, 10))->x_map ();
         }
-        else D->_slid [1] = D->_slid [2] = 0;
+        else D->_slid [1] = D->_slid [2] = D->_slid [3] = 0;
         if (D->_slid [0] || D->_slid [1])
         {
             add_text (x1 - 90, y, 80, 20,  M->_divisd [i]._label, &text0, 1);
@@ -173,6 +175,7 @@ void Instrwin::setup (M_ifc_init *M)
     {
         add_text (x1,       5, 80, 20, "Trem freq", &text0, -1);
         add_text (x1 + 160, 5, 80, 20, "Trem amp",  &text0, -1);
+        add_text (x1 + 320, 5, 80, 20, "FM strength", &text0, -1);
     }
     if (n2) add_text (x2, 5, 80, 20, "Swell", &text0, -1);
 
@@ -201,7 +204,7 @@ void Instrwin::set_dipar (M_ifc_dipar *M)
 
     if ((M->_divis >= 0) && (M->_divis < NDIVIS))
     {
-        if ((M->_parid >= 0) && (M->_parid < 3))
+        if ((M->_parid >= 0) && (M->_parid < 4))
         {
             S = _divisd [M->_divis]._slid [M->_parid];
             if (S) S->set_val (M->_value);

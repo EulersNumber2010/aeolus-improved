@@ -192,6 +192,7 @@ void AudioBackend::proc_queue (Lfq_u32 *Q)
             case 0: _divisp [j]->set_swell (u.f); break;
             case 1: _divisp [j]->set_tfreq (u.f); break;
             case 2: _divisp [j]->set_tmodd (u.f); break;
+            case 3: _divisp [j]->set_fmodd (u.f); break;
             }
             break;
 
@@ -317,6 +318,7 @@ void AudioBackend::proc_mesg (void)
                 D->set_swell (X->_swell);
                 D->set_tfreq (X->_tfreq);
                 D->set_tmodd (X->_tmodd);
+                D->set_fmodd (X->_fmodd);
                 _divisp [_ndivis] = D;
                 _ndivis++;
                 break;
